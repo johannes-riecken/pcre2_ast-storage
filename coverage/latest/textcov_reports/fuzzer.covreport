@@ -1,0 +1,257 @@
+LLVMFuzzerTestOneInput:
+    8|      7|extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    9|      7|  string s = "[1, 2, 3]";
+   10|      7|  if (to_json(from_json(s)) != s)
+   11|      0|    __builtin_trap();
+   12|      7|  return 0;
+   13|      7|}
+
+_Z7to_jsonNSt3__110unique_ptrINS_7variantIJNS_3mapINS_12basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEENS0_I1sNS_14default_deleteIS9_EEEENS_4lessIS8_EENS6_INS_4pairIKS8_SC_EEEEEEdS8_NS_6vectorISC_NS6_ISC_EEEEbNS_9monostateEEEENSA_ISO_EEEE:
+  139|     28|string to_json(unique_ptr<JsonValue> v) {
+  140|     28|    stringstream ret;
+  141|     28|    if (holds_alternative<map<string, unique_ptr<s>>>(*v)) {
+  142|      0|        ret << "{";
+  143|      0|        auto m = move(get<map<string, unique_ptr<s>>>(*v));
+  144|      0|        auto times_run = 0;
+  145|      0|        for (auto& kv : m) {
+  146|      0|            if (times_run++) {
+  147|      0|                ret << ", ";
+  148|      0|            }
+  149|      0|            ret << "\"" << kv.first << "\"" << ": " << to_json(make_unique<JsonValue>(move(kv.second->v)));
+  150|      0|        }
+  151|      0|        ret << "}";
+  152|     28|    } else if (holds_alternative<double>(*v)) {
+  153|     21|        auto n = get<double>(*v);
+  154|     21|        ret << n;
+  155|     21|    } else if (holds_alternative<string>(*v)) {
+  156|      0|        auto str = move(get<string>(*v));
+  157|      0|        ret << escape_string(str);
+  158|      7|    } else if (holds_alternative<vector<unique_ptr<s>>>(*v)) {
+  159|      7|        ret << "[";
+  160|      7|        auto vec = move(get<vector<unique_ptr<s>>>(*v));
+  161|      7|        auto times_run = 0;
+  162|     21|        for (auto& e : vec) {
+  163|     21|            if (times_run++) {
+  164|     14|                ret << ", ";
+  165|     14|            }
+  166|     21|            ret << to_json(make_unique<JsonValue>(move(e->v)));
+  167|     21|        }
+  168|      7|        ret << "]";
+  169|      7|    } else if (holds_alternative<bool>(*v)) {
+  170|      0|      auto b = get<bool>(*v);
+  171|      0|      ret << (b ? "true" : "false");
+  172|      0|    } else if (holds_alternative<monostate>(*v)) {
+  173|      0|      ret << "null";
+  174|      0|    }
+  175|     28|    return ret.str();
+  176|     28|}
+_Z9from_jsonRKNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE:
+  243|      7|unique_ptr<JsonValue> from_json(const string& str) {
+  244|      7|  pcre2_match_context *match_context = pcre2_match_context_create(nullptr);
+  245|      7|  pcre2_set_callout(match_context, callout_handler, nullptr);
+  246|      7|  stringstream ss;
+  247|      7|  ss << "(*NO_AUTO_POSSESS)(*NO_DOTSTAR_ANCHOR)(*NO_START_OPT)"
+  248|      7|        "\\A (?&json_val) \\z"
+  249|      7|        "(?(DEFINE)"
+  250|      7|        "(?<json_val>"
+  251|      7|        "\\s*"
+  252|      7|        "("
+  253|      7|        "    (?&string)"
+  254|      7|        "  |"
+  255|      7|        "    (?&push_number)"
+  256|      7|        "  |"
+  257|      7|        "    (?&object)"
+  258|      7|        "  |"
+  259|      7|        "    (?&array)"
+  260|      7|        "  |"
+  261|      7|        "  true (?C" << push_true << ")"
+  262|      7|        "|"
+  263|      7|        "  false (?C" << push_false << ")"
+  264|      7|        "|"
+  265|      7|        "  null (?C" << push_null << ")"
+  266|      7|        ")"
+  267|      7|        "\\s*"
+  268|      7|        ")"
+  269|      7|        "(?<string> "
+  270|      7|        "  ("
+  271|      7|        "    \""
+  272|      7|        "    (?:"
+  273|      7|        "      [^\\\\\"]+"
+  274|      7|        "    |"
+  275|      7|        "      \\ [\"\\\\/bfnrt]"
+  276|      7|        "    )*"
+  277|      7|        "    \""
+  278|      7|        "  )"
+  279|      7|        "(?C" << push_string << ")"
+  280|      7|        ")"
+  281|      7|        "(?<object> \\{ (?C" << create_map << ") ( (?&key) : (?&value) (?C" << push_back_map << ")"
+  282|      7|        "( , \\s* (?&key) : (?&value) (?C" << push_back_map << "))* )? \\} )"
+  283|      7|        "(?<key> (?&string) )"
+  284|      7|        "(?<value> (?&json_val) )"
+  285|      7|        "(?<push_number>"
+  286|      7|        "  ("
+  287|      7|        "    -?"
+  288|      7|        "    (?: 0 | [1-9]\\d* )"
+  289|      7|        "    (?: \\. \\d+ )?"
+  290|      7|        "    (?: [eE] [-+]? \\d+ )?"
+  291|      7|        "  )"
+  292|      7|        "  (?C" << push_number << ")"
+  293|      7|        ")"
+  294|      7|        "(?<array> \\[ (?C" << create_array << ") (?: (?&json_val) (?C" << push_back_array << ")"
+  295|      7|        "(?: , (?&json_val) (?C" << push_back_array << "))* )? \\] )"
+  296|       |
+  297|      7|        ")";
+  298|       |  // most of the following code is copied from libpcre2's pcre2demo.c
+  299|      7|  auto ss_str = ss.str();
+  300|      7|  auto pattern = reinterpret_cast<PCRE2_SPTR>(ss_str.c_str());
+  301|      7|  auto subject = reinterpret_cast<PCRE2_SPTR>(str.c_str());
+  302|      7|  auto subject_length = static_cast<PCRE2_SIZE>(strlen(reinterpret_cast<const char *>(subject)));
+  303|       |
+  304|      7|  int errornumber;
+  305|      7|  PCRE2_SIZE erroroffset;
+  306|      7|  pcre2_code *re = pcre2_compile(
+  307|      7|      pattern,                      /* the pattern */
+  308|      7|      PCRE2_ZERO_TERMINATED,        /* indicates pattern is zero-terminated */
+  309|      7|      PCRE2_EXTENDED, &errornumber, /* for error push_number */
+  310|      7|      &erroroffset,                 /* for error offset */
+  311|      7|      nullptr);                     /* use default compile context */
+  312|       |
+  313|      7|  if (re == nullptr) {
+  314|      0|    constexpr int BUF_SZ = 256;
+  315|      0|    array<PCRE2_UCHAR, BUF_SZ> buffer {};
+  316|      0|    pcre2_get_error_message(errornumber, buffer.data(), buffer.size());
+  317|      0|    cout << "PCRE2 compilation failed at offset " << erroroffset << ": "
+  318|      0|         << buffer.data() << endl;
+  319|      0|    return nullptr;
+  320|      0|  }
+  321|       |
+  322|      7|  pcre2_match_data *match_data =
+  323|      7|      pcre2_match_data_create_from_pattern(re, nullptr);
+  324|       |
+  325|      7|  int rc = pcre2_match(re,             /* the compiled pattern */
+  326|      7|                       subject,        /* the subject string */
+  327|      7|                       subject_length, /* the length of the subject */
+  328|      7|                       0,              /* start at offset 0 in the subject */
+  329|      7|                       0,              /* default options */
+  330|      7|                       match_data,     /* block for storing the result */
+  331|      7|                       match_context); /* use default match context */
+  332|       |  /* nullptr);       /1* use default match context *1/ */
+  333|       |
+  334|       |  /* Matching failed: handle error cases */
+  335|       |
+  336|      7|  if (rc < 0) {
+  337|      0|    if (rc == PCRE2_ERROR_NOMATCH) {
+  338|      0|        cout << "No match" << endl;
+  339|      0|    } else {
+  340|      0|      cout << "Matching error: " << rc << endl;
+  341|      0|    }
+  342|      0|    pcre2_match_data_free(match_data); /* Release memory used for the match */
+  343|      0|    pcre2_code_free(re);               /*   data and the compiled pattern. */
+  344|      0|    pcre2_match_context_free(match_context);
+  345|      0|    return nullptr;
+  346|      0|  }
+  347|       |
+  348|       |  /* Match succeded. Get a pointer to the output vector, where string offsets
+  349|       |  are stored. */
+  350|       |
+  351|      7|  PCRE2_SIZE *ovector = pcre2_get_ovector_pointer(match_data);
+  352|       |
+  353|       |  /*************************************************************************
+  354|       |   * We have found the first match within the subject string. If the output *
+  355|       |   * vector wasn't big enough, say so. Then output any substrings that were *
+  356|       |   * captured.                                                              *
+  357|       |   *************************************************************************/
+  358|       |
+  359|       |  /* The output vector wasn't big enough. This should not happen, because we
+  360|       |  used pcre2_match_data_create_from_pattern() above. */
+  361|       |
+  362|      7|  if (rc == 0) {
+  363|      0|      cout << "ovector was not big enough for all the captured substrings" << endl;
+  364|      0|  }
+  365|       |
+  366|       |  /* We must guard against patterns such as /(?=.\K)/ that use \K in an
+  367|       |  assertion to set the start of a match later than its end. In this
+  368|       |  demonstration program, we just detect this case and give up. */
+  369|       |
+  370|      7|  if (ovector[0] > ovector[1]) {
+  371|      0|    cout <<
+  372|      0|        "\\K was used in an assertion to set the match start after its end.\n";
+  373|       |        /* "From end to start the match was: %.*s\n", */
+  374|       |        /* (int)(ovector[0] - ovector[1]), (char *)(subject + ovector[1]); */
+  375|      0|    cout << "Run abandoned" << endl;
+  376|      0|    pcre2_match_data_free(match_data);
+  377|      0|    pcre2_code_free(re);
+  378|      0|    pcre2_match_context_free(match_context);
+  379|      0|    return nullptr;
+  380|      0|  }
+  381|      7|  pcre2_match_data_free(match_data);
+  382|      7|  pcre2_code_free(re);
+  383|      7|  pcre2_match_context_free(match_context);
+  384|      7|  return move(st.back());
+  385|      7|}
+pcre2_ast.cpp:_ZL15callout_handlerP21pcre2_callout_block_8Pv:
+  180|     49|static int callout_handler(pcre2_callout_block *c, void *data) {
+  181|     49|  if (is_debug) {
+  182|      0|    cout << command_to_string(static_cast<command>(c->callout_number)) << endl;
+  183|      0|  }
+  184|     49|  switch (c->callout_number) {
+  185|      7|  case create_array: {
+  186|      7|    JsonValue val = vector<unique_ptr<s>> {};
+  187|      7|    st.push_back(make_unique<JsonValue>(move(val)));
+  188|      7|  } break;
+  189|     21|  case push_back_array: {
+  190|     21|    unique_ptr<JsonValue> x = move(st.back());
+  191|     21|    st.pop_back();
+  192|     21|    unique_ptr<JsonValue> vec_variant = move(st.back());
+  193|     21|    st.pop_back();
+  194|     21|    vector<unique_ptr<s>> vec = move(get<vector<unique_ptr<s>>>(*vec_variant));
+  195|     21|    vec.push_back(unique_ptr<s>(new s { .v = move(*x) }));
+  196|     21|    st.push_back(make_unique<JsonValue>(move(vec)));
+  197|     21|  } break;
+  198|     21|  case push_number: {
+  199|     21|    auto begin_offset = c->offset_vector[c->capture_last * 2];
+  200|     21|    auto end_offset   = c->offset_vector[c->capture_last * 2 + 1];
+  201|     21|    string subject { (char*)c->subject };
+  202|     21|    auto val_str = subject.substr(begin_offset, end_offset - begin_offset);
+  203|     21|    st.push_back(make_unique<JsonValue>(stod(val_str)));
+  204|     21|  } break;
+  205|      0|  case push_string: {
+  206|      0|    auto begin_offset = c->offset_vector[c->capture_last * 2];
+  207|      0|    auto end_offset   = c->offset_vector[c->capture_last * 2 + 1];
+  208|      0|    string subject { (char*)c->subject };
+  209|      0|    JsonValue val_str = parse_json_string(subject.substr(begin_offset, end_offset - begin_offset));
+  210|      0|    st.push_back(make_unique<JsonValue>(move(val_str)));
+  211|      0|  } break;
+  212|      0|  case create_map: {
+  213|      0|    st.push_back(make_unique<JsonValue>(map<string, unique_ptr<s>> {}));
+  214|      0|  } break;
+  215|      0|  case push_back_map: {
+  216|      0|    unique_ptr<JsonValue> v = move(st.back());
+  217|      0|    st.pop_back();
+  218|      0|    string k = get<string>(*move(st.back()));
+  219|      0|    st.pop_back();
+  220|      0|    map<string, unique_ptr<s>> m = move(get<map<string, unique_ptr<s>>>(*st.back()));
+  221|      0|    st.pop_back();
+  222|      0|    m[k] = unique_ptr<s> { new s { .v = move(*v) } };
+  223|      0|    st.push_back(make_unique<JsonValue>(move(m)));
+  224|      0|  } break;
+  225|      0|  case push_true: {
+  226|      0|      st.push_back(move(make_unique<JsonValue>(true)));
+  227|      0|  } break;
+  228|      0|  case push_false: {
+  229|      0|    st.push_back(move(make_unique<JsonValue>(false)));
+  230|      0|  } break;
+  231|      0|  case push_null: {
+  232|      0|    st.push_back(move(make_unique<JsonValue>(monostate {})));
+  233|      0|  } break;
+  234|      0|  default: {
+  235|      0|    cout << "Exception is exceptional" << endl;
+  236|      0|    throw exception{};
+  237|      0|  }
+  238|     49|  }
+  239|     49|  return 0;
+  240|     49|}
+
+_ZN1sD2Ev:
+   22|     21|inline s::~s() = default;
+
