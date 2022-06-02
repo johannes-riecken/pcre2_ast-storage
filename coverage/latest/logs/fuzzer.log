@@ -1,4 +1,4 @@
 INFO: Running with entropic power schedule (0xFF, 100).
-INFO: Seed: 4116275380
-INFO: Loaded 1 modules   (1494 inline 8-bit counters): 1494 [0x5a3978, 0x5a3f4e), 
-INFO: Loaded 1 PC tables (1494 PCs): 1494 [0x5479d8,0x54d738), 
+INFO: Seed: 4120781472
+INFO: Loaded 1 modules   (1006 inline 8-bit counters): 1006 [0x6670b8, 0x6674a6), 
+INFO: Loaded 1 PC tables (1006 PCs): 1006 [0x5fcf80,0x600e60), 
