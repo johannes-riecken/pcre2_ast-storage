@@ -16,8 +16,8 @@ LLVMFuzzerTestOneInput:
    16|     24|    return 0;
    17|     24|}
 
-_Z7to_jsonNSt3__110shared_ptrINS_7variantIJNS_3mapINS_12basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEENS0_I1sEENS_4lessIS8_EENS6_INS_4pairIKS8_SA_EEEEEEdS8_NS_6vectorISA_NS6_ISA_EEEEbNS_9monostateEEEEEE:
-  142|      4|string to_json(shared_ptr<JsonValue> v) {
+_Z7to_jsonRKNSt3__110shared_ptrINS_7variantIJNS_3mapINS_12basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEENS0_I1sEENS_4lessIS8_EENS6_INS_4pairIKS8_SA_EEEEEEdS8_NS_6vectorISA_NS6_ISA_EEEEbNS_9monostateEEEEEE:
+  142|      4|string to_json(const shared_ptr<JsonValue>& v) {
   143|      4|    using QueueItem = variant<JsonValue, string>;
   144|      4|    queue<QueueItem> q;
   145|      4|    q.push(*v);
@@ -268,7 +268,7 @@ _Z9from_jsonRKNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE:
   401|      4|  return move(st.back());
   402|      4|}
 pcre2_ast.cpp:_ZL15callout_handlerP21pcre2_callout_block_8Pv:
-  197|     86|static int callout_handler(pcre2_callout_block *c, void *data) {
+  197|     86|static int callout_handler(pcre2_callout_block *c, [[maybe_unused]] void *data) {
   198|     86|  if (is_debug) {
   ------------------
   |  Branch (198:7): [Folded - Ignored]
