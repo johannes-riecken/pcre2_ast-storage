@@ -1,10 +1,10 @@
 LLVMFuzzerTestOneInput:
-    8|     25|extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
-    9|     25|  string s( reinterpret_cast<char const*>(data), size ) ;
-   10|     25|    auto v = from_json(s);
-   11|     25|    if (v != nullptr) {
+    8|     27|extern "C" int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size) {
+    9|     27|  string s( reinterpret_cast<char const*>(data), size ) ;
+   10|     27|    auto v = from_json(s);
+   11|     27|    if (v != nullptr) {
   ------------------
-  |  Branch (11:9): [True: 5, False: 20]
+  |  Branch (11:9): [True: 5, False: 22]
   ------------------
    12|      5|        if (to_json(std::move(v)) != s)
   ------------------
@@ -13,8 +13,8 @@ LLVMFuzzerTestOneInput:
    13|      0|            __builtin_trap();
    14|      5|    }
    15|       |
-   16|     25|    return 0;
-   17|     25|}
+   16|     27|    return 0;
+   17|     27|}
 
 _Z7to_jsonRKNSt3__110shared_ptrINS_7variantIJNS_3mapINS_12basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEENS0_I1sEENS_4lessIS8_EENS6_INS_4pairIKS8_SA_EEEEEEdS8_NS_6vectorISA_NS6_ISA_EEEEbNS_9monostateEEEEEE:
   142|      5|string to_json(const shared_ptr<JsonValue>& v) {
@@ -109,79 +109,79 @@ _Z7to_jsonRKNSt3__110shared_ptrINS_7variantIJNS_3mapINS_12basic_stringIcNS_11cha
   192|      5|    return ret.str();
   193|      5|}
 _Z9from_jsonRKNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE:
-  260|     25|shared_ptr<JsonValue> from_json(const string& str) {
-  261|     25|  pcre2_match_context *match_context = pcre2_match_context_create(nullptr);
-  262|     25|  pcre2_set_callout(match_context, callout_handler, nullptr);
-  263|     25|  stringstream ss;
-  264|     25|  ss << "(*NO_AUTO_POSSESS)(*NO_DOTSTAR_ANCHOR)(*NO_START_OPT)"
-  265|     25|        "\\A (?&json_val) \\z"
-  266|     25|        "(?(DEFINE)"
-  267|     25|        "(?<json_val>"
-  268|     25|        "\\s*"
-  269|     25|        "("
-  270|     25|        "    (?&string)"
-  271|     25|        "  |"
-  272|     25|        "    (?&push_number)"
-  273|     25|        "  |"
-  274|     25|        "    (?&object)"
-  275|     25|        "  |"
-  276|     25|        "    (?&array)"
-  277|     25|        "  |"
-  278|     25|        "  true (?C" << push_true << ")"
-  279|     25|        "|"
-  280|     25|        "  false (?C" << push_false << ")"
-  281|     25|        "|"
-  282|     25|        "  null (?C" << push_null << ")"
-  283|     25|        ")"
-  284|     25|        "\\s*"
-  285|     25|        ")"
-  286|     25|        "(?<string> "
-  287|     25|        "  ("
-  288|     25|        "    \""
-  289|     25|        "    (?:"
-  290|     25|        "      [^\\\\\"]+"
-  291|     25|        "    |"
-  292|     25|        "      \\ [\"\\\\/bfnrt]"
-  293|     25|        "    )*"
-  294|     25|        "    \""
-  295|     25|        "  )"
-  296|     25|        "(?C" << push_string << ")"
-  297|     25|        ")"
-  298|     25|        "(?<object> \\{ (?C" << create_map << ") ( (?&key) : (?&value) (?C" << push_back_map << ")"
-  299|     25|        "( , \\s* (?&key) : (?&value) (?C" << push_back_map << "))* )? \\} )"
-  300|     25|        "(?<key> (?&string) )"
-  301|     25|        "(?<value> (?&json_val) )"
-  302|     25|        "(?<push_number>"
-  303|     25|        "  ("
-  304|     25|        "    -?"
-  305|     25|        "    (?: 0 | [1-9]\\d* )"
-  306|     25|        "    (?: \\. \\d+ )?"
-  307|     25|        "    (?: [eE] [-+]? \\d+ )?"
-  308|     25|        "  )"
-  309|     25|        "  (?C" << push_number << ")"
-  310|     25|        ")"
-  311|     25|        "(?<array> \\[ (?C" << create_array << ") (?: (?&json_val) (?C" << push_back_array << ")"
-  312|     25|        "(?: , (?&json_val) (?C" << push_back_array << "))* )? \\] )"
+  260|     27|shared_ptr<JsonValue> from_json(const string& str) {
+  261|     27|  pcre2_match_context *match_context = pcre2_match_context_create(nullptr);
+  262|     27|  pcre2_set_callout(match_context, callout_handler, nullptr);
+  263|     27|  stringstream ss;
+  264|     27|  ss << "(*NO_AUTO_POSSESS)(*NO_DOTSTAR_ANCHOR)(*NO_START_OPT)"
+  265|     27|        "\\A (?&json_val) \\z"
+  266|     27|        "(?(DEFINE)"
+  267|     27|        "(?<json_val>"
+  268|     27|        "\\s*"
+  269|     27|        "("
+  270|     27|        "    (?&string)"
+  271|     27|        "  |"
+  272|     27|        "    (?&push_number)"
+  273|     27|        "  |"
+  274|     27|        "    (?&object)"
+  275|     27|        "  |"
+  276|     27|        "    (?&array)"
+  277|     27|        "  |"
+  278|     27|        "  true (?C" << push_true << ")"
+  279|     27|        "|"
+  280|     27|        "  false (?C" << push_false << ")"
+  281|     27|        "|"
+  282|     27|        "  null (?C" << push_null << ")"
+  283|     27|        ")"
+  284|     27|        "\\s*"
+  285|     27|        ")"
+  286|     27|        "(?<string> "
+  287|     27|        "  ("
+  288|     27|        "    \""
+  289|     27|        "    (?:"
+  290|     27|        "      [^\\\\\"]+"
+  291|     27|        "    |"
+  292|     27|        "      \\ [\"\\\\/bfnrt]"
+  293|     27|        "    )*"
+  294|     27|        "    \""
+  295|     27|        "  )"
+  296|     27|        "(?C" << push_string << ")"
+  297|     27|        ")"
+  298|     27|        "(?<object> \\{ (?C" << create_map << ") ( (?&key) : (?&value) (?C" << push_back_map << ")"
+  299|     27|        "( , \\s* (?&key) : (?&value) (?C" << push_back_map << "))* )? \\} )"
+  300|     27|        "(?<key> (?&string) )"
+  301|     27|        "(?<value> (?&json_val) )"
+  302|     27|        "(?<push_number>"
+  303|     27|        "  ("
+  304|     27|        "    -?"
+  305|     27|        "    (?: 0 | [1-9]\\d* )"
+  306|     27|        "    (?: \\. \\d+ )?"
+  307|     27|        "    (?: [eE] [-+]? \\d+ )?"
+  308|     27|        "  )"
+  309|     27|        "  (?C" << push_number << ")"
+  310|     27|        ")"
+  311|     27|        "(?<array> \\[ (?C" << create_array << ") (?: (?&json_val) (?C" << push_back_array << ")"
+  312|     27|        "(?: , (?&json_val) (?C" << push_back_array << "))* )? \\] )"
   313|       |
-  314|     25|        ")";
+  314|     27|        ")";
   315|       |  // most of the following code is copied from libpcre2's pcre2demo.c
-  316|     25|  auto ss_str = ss.str();
-  317|     25|  auto pattern = reinterpret_cast<PCRE2_SPTR>(ss_str.c_str());
-  318|     25|  auto subject = reinterpret_cast<PCRE2_SPTR>(str.c_str());
-  319|     25|  auto subject_length = static_cast<PCRE2_SIZE>(strlen(reinterpret_cast<const char *>(subject)));
+  316|     27|  auto ss_str = ss.str();
+  317|     27|  auto pattern = reinterpret_cast<PCRE2_SPTR>(ss_str.c_str());
+  318|     27|  auto subject = reinterpret_cast<PCRE2_SPTR>(str.c_str());
+  319|     27|  auto subject_length = static_cast<PCRE2_SIZE>(strlen(reinterpret_cast<const char *>(subject)));
   320|       |
-  321|     25|  int errornumber;
-  322|     25|  PCRE2_SIZE erroroffset;
-  323|     25|  pcre2_code *re = pcre2_compile(
-  324|     25|      pattern,                      /* the pattern */
-  325|     25|      PCRE2_ZERO_TERMINATED,        /* indicates pattern is zero-terminated */
-  326|     25|      PCRE2_EXTENDED, &errornumber, /* for error push_number */
-  327|     25|      &erroroffset,                 /* for error offset */
-  328|     25|      nullptr);                     /* use default compile context */
+  321|     27|  int errornumber;
+  322|     27|  PCRE2_SIZE erroroffset;
+  323|     27|  pcre2_code *re = pcre2_compile(
+  324|     27|      pattern,                      /* the pattern */
+  325|     27|      PCRE2_ZERO_TERMINATED,        /* indicates pattern is zero-terminated */
+  326|     27|      PCRE2_EXTENDED, &errornumber, /* for error push_number */
+  327|     27|      &erroroffset,                 /* for error offset */
+  328|     27|      nullptr);                     /* use default compile context */
   329|       |
-  330|     25|  if (re == nullptr) {
+  330|     27|  if (re == nullptr) {
   ------------------
-  |  Branch (330:7): [True: 0, False: 25]
+  |  Branch (330:7): [True: 0, False: 27]
   ------------------
   331|      0|    constexpr int BUF_SZ = 256;
   332|      0|    array<PCRE2_UCHAR, BUF_SZ> buffer {};
@@ -191,37 +191,37 @@ _Z9from_jsonRKNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE:
   336|      0|    return nullptr;
   337|      0|  }
   338|       |
-  339|     25|  pcre2_match_data *match_data =
-  340|     25|      pcre2_match_data_create_from_pattern(re, nullptr);
+  339|     27|  pcre2_match_data *match_data =
+  340|     27|      pcre2_match_data_create_from_pattern(re, nullptr);
   341|       |
-  342|     25|  int rc = pcre2_match(re,             /* the compiled pattern */
-  343|     25|                       subject,        /* the subject string */
-  344|     25|                       subject_length, /* the length of the subject */
-  345|     25|                       0,              /* start at offset 0 in the subject */
-  346|     25|                       0,              /* default options */
-  347|     25|                       match_data,     /* block for storing the result */
-  348|     25|                       match_context); /* use default match context */
+  342|     27|  int rc = pcre2_match(re,             /* the compiled pattern */
+  343|     27|                       subject,        /* the subject string */
+  344|     27|                       subject_length, /* the length of the subject */
+  345|     27|                       0,              /* start at offset 0 in the subject */
+  346|     27|                       0,              /* default options */
+  347|     27|                       match_data,     /* block for storing the result */
+  348|     27|                       match_context); /* use default match context */
   349|       |  /* nullptr);       /1* use default match context *1/ */
   350|       |
   351|       |  /* Matching failed: handle error cases */
   352|       |
-  353|     25|  if (rc < 0) {
+  353|     27|  if (rc < 0) {
   ------------------
-  |  Branch (353:7): [True: 20, False: 5]
+  |  Branch (353:7): [True: 22, False: 5]
   ------------------
-  354|     20|    if (rc == PCRE2_ERROR_NOMATCH) {
+  354|     22|    if (rc == PCRE2_ERROR_NOMATCH) {
   ------------------
-  |  Branch (354:9): [True: 20, False: 0]
+  |  Branch (354:9): [True: 22, False: 0]
   ------------------
   355|       |        /* cout << "No match" << endl; */
-  356|     20|    } else {
+  356|     22|    } else {
   357|       |      /* cout << "Matching error: " << rc << endl; */
   358|      0|    }
-  359|     20|    pcre2_match_data_free(match_data); /* Release memory used for the match */
-  360|     20|    pcre2_code_free(re);               /*   data and the compiled pattern. */
-  361|     20|    pcre2_match_context_free(match_context);
-  362|     20|    return nullptr;
-  363|     20|  }
+  359|     22|    pcre2_match_data_free(match_data); /* Release memory used for the match */
+  360|     22|    pcre2_code_free(re);               /*   data and the compiled pattern. */
+  361|     22|    pcre2_match_context_free(match_context);
+  362|     22|    return nullptr;
+  363|     22|  }
   364|       |
   365|       |  /* Match succeded. Get a pointer to the output vector, where string offsets
   366|       |  are stored. */
@@ -268,46 +268,46 @@ _Z9from_jsonRKNSt3__112basic_stringIcNS_11char_traitsIcEENS_9allocatorIcEEEE:
   401|      5|  return move(st.back());
   402|      5|}
 pcre2_ast.cpp:_ZL15callout_handlerP21pcre2_callout_block_8Pv:
-  197|     87|static int callout_handler(pcre2_callout_block *c, [[maybe_unused]] void *data) {
-  198|     87|  if (is_debug) {
+  197|     95|static int callout_handler(pcre2_callout_block *c, [[maybe_unused]] void *data) {
+  198|     95|  if (is_debug) {
   ------------------
   |  Branch (198:7): [Folded - Ignored]
   ------------------
   199|      0|    cout << command_to_string(static_cast<command>(c->callout_number)) << endl;
   200|      0|  }
-  201|     87|  switch (c->callout_number) {
-  202|     39|  case create_array: {
+  201|     95|  switch (c->callout_number) {
+  202|     41|  case create_array: {
   ------------------
-  |  Branch (202:3): [True: 39, False: 48]
+  |  Branch (202:3): [True: 41, False: 54]
   ------------------
-  203|     39|    JsonValue val = vector<shared_ptr<s>> {};
-  204|     39|    st.push_back(make_shared<JsonValue>(move(val)));
-  205|     39|  } break;
-  206|     12|  case push_back_array: {
+  203|     41|    JsonValue val = vector<shared_ptr<s>> {};
+  204|     41|    st.push_back(make_shared<JsonValue>(move(val)));
+  205|     41|  } break;
+  206|     15|  case push_back_array: {
   ------------------
-  |  Branch (206:3): [True: 12, False: 75]
+  |  Branch (206:3): [True: 15, False: 80]
   ------------------
-  207|     12|    shared_ptr<JsonValue> x = move(st.back());
-  208|     12|    st.pop_back();
-  209|     12|    shared_ptr<JsonValue> vec_variant = move(st.back());
-  210|     12|    st.pop_back();
-  211|     12|    vector<shared_ptr<s>> vec = move(get<vector<shared_ptr<s>>>(*vec_variant));
-  212|     12|    vec.push_back(shared_ptr<s>(new s { .v = move(*x) }));
-  213|     12|    st.push_back(make_shared<JsonValue>(move(vec)));
-  214|     12|  } break;
-  215|     35|  case push_number: {
+  207|     15|    shared_ptr<JsonValue> x = move(st.back());
+  208|     15|    st.pop_back();
+  209|     15|    shared_ptr<JsonValue> vec_variant = move(st.back());
+  210|     15|    st.pop_back();
+  211|     15|    vector<shared_ptr<s>> vec = move(get<vector<shared_ptr<s>>>(*vec_variant));
+  212|     15|    vec.push_back(shared_ptr<s>(new s { .v = move(*x) }));
+  213|     15|    st.push_back(make_shared<JsonValue>(move(vec)));
+  214|     15|  } break;
+  215|     38|  case push_number: {
   ------------------
-  |  Branch (215:3): [True: 35, False: 52]
+  |  Branch (215:3): [True: 38, False: 57]
   ------------------
-  216|     35|    auto begin_offset = c->offset_vector[c->capture_last * 2];
-  217|     35|    auto end_offset   = c->offset_vector[c->capture_last * 2 + 1];
-  218|     35|    string subject { (char*)c->subject };
-  219|     35|    auto val_str = subject.substr(begin_offset, end_offset - begin_offset);
-  220|     35|    st.push_back(make_shared<JsonValue>(stod(val_str)));
-  221|     35|  } break;
+  216|     38|    auto begin_offset = c->offset_vector[c->capture_last * 2];
+  217|     38|    auto end_offset   = c->offset_vector[c->capture_last * 2 + 1];
+  218|     38|    string subject { (char*)c->subject };
+  219|     38|    auto val_str = subject.substr(begin_offset, end_offset - begin_offset);
+  220|     38|    st.push_back(make_shared<JsonValue>(stod(val_str)));
+  221|     38|  } break;
   222|      0|  case push_string: {
   ------------------
-  |  Branch (222:3): [True: 0, False: 87]
+  |  Branch (222:3): [True: 0, False: 95]
   ------------------
   223|      0|    auto begin_offset = c->offset_vector[c->capture_last * 2];
   224|      0|    auto end_offset   = c->offset_vector[c->capture_last * 2 + 1];
@@ -317,13 +317,13 @@ pcre2_ast.cpp:_ZL15callout_handlerP21pcre2_callout_block_8Pv:
   228|      0|  } break;
   229|      1|  case create_map: {
   ------------------
-  |  Branch (229:3): [True: 1, False: 86]
+  |  Branch (229:3): [True: 1, False: 94]
   ------------------
   230|      1|    st.push_back(make_shared<JsonValue>(map<string, shared_ptr<s>> {}));
   231|      1|  } break;
   232|      0|  case push_back_map: {
   ------------------
-  |  Branch (232:3): [True: 0, False: 87]
+  |  Branch (232:3): [True: 0, False: 95]
   ------------------
   233|      0|    shared_ptr<JsonValue> v = move(st.back());
   234|      0|    st.pop_back();
@@ -336,30 +336,30 @@ pcre2_ast.cpp:_ZL15callout_handlerP21pcre2_callout_block_8Pv:
   241|      0|  } break;
   242|      0|  case push_true: {
   ------------------
-  |  Branch (242:3): [True: 0, False: 87]
+  |  Branch (242:3): [True: 0, False: 95]
   ------------------
   243|      0|      st.push_back(move(make_shared<JsonValue>(true)));
   244|      0|  } break;
   245|      0|  case push_false: {
   ------------------
-  |  Branch (245:3): [True: 0, False: 87]
+  |  Branch (245:3): [True: 0, False: 95]
   ------------------
   246|      0|    st.push_back(move(make_shared<JsonValue>(false)));
   247|      0|  } break;
   248|      0|  case push_null: {
   ------------------
-  |  Branch (248:3): [True: 0, False: 87]
+  |  Branch (248:3): [True: 0, False: 95]
   ------------------
   249|      0|    st.push_back(move(make_shared<JsonValue>(monostate {})));
   250|      0|  } break;
   251|      0|  default: {
   ------------------
-  |  Branch (251:3): [True: 0, False: 87]
+  |  Branch (251:3): [True: 0, False: 95]
   ------------------
   252|      0|    cout << "Exception is exceptional" << endl;
   253|      0|    throw exception{};
   254|      0|  }
-  255|     87|  }
-  256|     87|  return 0;
-  257|     87|}
+  255|     95|  }
+  256|     95|  return 0;
+  257|     95|}
 
