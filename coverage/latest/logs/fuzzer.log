@@ -1,11 +1,11 @@
 INFO: Running with entropic power schedule (0xFF, 100).
-INFO: Seed: 4151410100
+INFO: Seed: 477910592
 INFO: Loaded 1 modules   (41 inline 8-bit counters): 41 [0x6057b0, 0x6057d9), 
 INFO: Loaded 1 PC tables (41 PCs): 41 [0x59bf18,0x59c1a8), 
 MERGE-OUTER: 32 files, 0 in the initial corpus, 0 processed earlier
 MERGE-OUTER: attempt 1
 INFO: Running with entropic power schedule (0xFF, 100).
-INFO: Seed: 4151420016
+INFO: Seed: 477925746
 INFO: Loaded 1 modules   (41 inline 8-bit counters): 41 [0x6057b0, 0x6057d9), 
 INFO: Loaded 1 PC tables (41 PCs): 41 [0x59bf18,0x59c1a8), 
 INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 1048576 bytes
