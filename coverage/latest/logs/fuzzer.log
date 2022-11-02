@@ -1,24 +1,110 @@
 INFO: Running with entropic power schedule (0xFF, 100).
-INFO: Seed: 3908002886
+INFO: Seed: 4150987616
 INFO: Loaded 1 modules   (108 inline 8-bit counters): 108 [0x609b40, 0x609bac), 
 INFO: Loaded 1 PC tables (108 PCs): 108 [0x59e928,0x59efe8), 
-MERGE-OUTER: 39 files, 0 in the initial corpus, 0 processed earlier
+MERGE-OUTER: 44 files, 0 in the initial corpus, 0 processed earlier
 MERGE-OUTER: attempt 1
 INFO: Running with entropic power schedule (0xFF, 100).
-INFO: Seed: 3908017564
+INFO: Seed: 4150996796
 INFO: Loaded 1 modules   (108 inline 8-bit counters): 108 [0x609b40, 0x609bac), 
 INFO: Loaded 1 PC tables (108 PCs): 108 [0x59e928,0x59efe8), 
 INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 1048576 bytes
-MERGE-INNER: using the control file '/tmp/libFuzzerTemp.Merge67.txt'
-MERGE-INNER: 39 total files; 0 processed earlier; will process 39 files now
+MERGE-INNER: using the control file '/tmp/libFuzzerTemp.Merge69.txt'
+MERGE-INNER: 44 total files; 0 processed earlier; will process 44 files now
 #1	pulse  cov: 17 ft: 18 exec/s: 0 rss: 29Mb
 #2	pulse  cov: 19 ft: 20 exec/s: 0 rss: 29Mb
 #4	pulse  cov: 19 ft: 20 exec/s: 0 rss: 29Mb
 #8	pulse  cov: 19 ft: 20 exec/s: 0 rss: 29Mb
 #16	pulse  cov: 19 ft: 20 exec/s: 0 rss: 29Mb
-#32	pulse  cov: 20 ft: 21 exec/s: 0 rss: 29Mb
-#39	DONE   cov: 21 ft: 22 exec/s: 0 rss: 29Mb
-MERGE-OUTER: successful in 1 attempt(s)
-MERGE-OUTER: the control file has 4270 bytes
+libc++abi: terminating with uncaught exception of type std::bad_variant_access: bad_variant_access
+==72== ERROR: libFuzzer: deadly signal
+    #0 0x4bfe94 in __sanitizer_print_stack_trace /src/llvm-project/compiler-rt/lib/ubsan/ubsan_diag_standalone.cpp:31:3
+    #1 0x441038 in fuzzer::PrintStackTrace() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerUtil.cpp:210:5
+    #2 0x425d13 in fuzzer::Fuzzer::CrashCallback() /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:233:3
+    #3 0x7f875d25d41f  (/lib/x86_64-linux-gnu/libpthread.so.0+0x1441f) (BuildId: 7b4536f41cdaa5888408e82d0836e33dcf436466)
+    #4 0x7f875d07300a in raise (/lib/x86_64-linux-gnu/libc.so.6+0x4300a) (BuildId: 1878e6b475720c7c51969e69ab2d276fae6d1dee)
+    #5 0x7f875d052858 in abort (/lib/x86_64-linux-gnu/libc.so.6+0x22858) (BuildId: 1878e6b475720c7c51969e69ab2d276fae6d1dee)
+    #6 0x51fbf5 in abort_message (build-out/fuzzer+0x51fbf5)
+    #7 0x52919e in demangling_terminate_handler() cxa_default_handlers.cpp
+    #8 0x51f672 in std::__terminate(void (*)()) (build-out/fuzzer+0x51f672)
+    #9 0x521705 in __cxxabiv1::failed_throw(__cxxabiv1::__cxa_exception*) cxa_exception.cpp
+    #10 0x52169f in __cxa_throw (build-out/fuzzer+0x52169f)
+    #11 0x4c1f4b in std::__1::__throw_bad_variant_access() /usr/local/bin/../include/c++/v1/variant:267:9
+    #12 0x4c8b57 in __generic_get<3UL, std::__1::variant<std::__1::map<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::shared_ptr<s>, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::pair<const std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::shared_ptr<s> > > >, double, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::vector<std::__1::shared_ptr<s>, std::__1::allocator<std::__1::shared_ptr<s> > >, bool, std::__1::monostate> &> /usr/local/bin/../include/c++/v1/variant:1487:5
+    #13 0x4c8b57 in get<3UL, std::__1::map<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::shared_ptr<s>, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::pair<const std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::shared_ptr<s> > > >, double, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::vector<std::__1::shared_ptr<s>, std::__1::allocator<std::__1::shared_ptr<s> > >, bool, std::__1::monostate> /usr/local/bin/../include/c++/v1/variant:1499:10
+    #14 0x4c8b57 in std::__1::vector<std::__1::shared_ptr<s>, std::__1::allocator<std::__1::shared_ptr<s> > >& std::__1::get<std::__1::vector<std::__1::shared_ptr<s>, std::__1::allocator<std::__1::shared_ptr<s> > >, std::__1::map<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::shared_ptr<s>, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::pair<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const, std::__1::shared_ptr<s> > > >, double, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::vector<std::__1::shared_ptr<s>, std::__1::allocator<std::__1::shared_ptr<s> > >, bool, std::__1::monostate>(std::__1::variant<std::__1::map<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::shared_ptr<s>, std::__1::less<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > >, std::__1::allocator<std::__1::pair<std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const, std::__1::shared_ptr<s> > > >, double, std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> >, std::__1::vector<std::__1::shared_ptr<s>, std::__1::allocator<std::__1::shared_ptr<s> > >, bool, std::__1::monostate>&) /usr/local/bin/../include/c++/v1/variant:1537:10
+    #15 0x4c78bd in callout_handler(pcre2_callout_block_8*, void*) /src/pcre2_ast/pcre2_ast.cpp:213:38
+    #16 0x7f875d2b6905  (/lib/x86_64-linux-gnu/libpcre2-8.so.0+0x4a905) (BuildId: b014a445a36144258dc62004fd30cb8ab3fca60a)
+    #17 0x7f875d2b8484 in pcre2_match_8 (/lib/x86_64-linux-gnu/libpcre2-8.so.0+0x4c484) (BuildId: b014a445a36144258dc62004fd30cb8ab3fca60a)
+    #18 0x4c6862 in from_json(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&) /src/pcre2_ast/pcre2_ast.cpp:344:12
+    #19 0x4c13eb in LLVMFuzzerTestOneInput /src/pcre2_ast/fuzzer.cc:11:13
+    #20 0x4272b3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #21 0x4300a4 in fuzzer::Fuzzer::CrashResistantMergeInternalStep(std::__Fuzzer::basic_string<char, std::__Fuzzer::char_traits<char>, std::__Fuzzer::allocator<char> > const&, bool) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMerge.cpp:235:5
+    #22 0x418149 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:885:8
+    #23 0x4417f2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #24 0x7f875d054082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: 1878e6b475720c7c51969e69ab2d276fae6d1dee)
+    #25 0x408bdd in _start (build-out/fuzzer+0x408bdd)
+
+DEDUP_TOKEN: __sanitizer_print_stack_trace--fuzzer::PrintStackTrace()--fuzzer::Fuzzer::CrashCallback()
+NOTE: libFuzzer has rudimentary signal handlers.
+      Combine libFuzzer with AddressSanitizer or similar for better crash reports.
+SUMMARY: libFuzzer: deadly signal
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0x5b,0x39,0x39,0x34,0x30,0xa,0x3f,0xff,0xff,0x7b,0xff,0xff,0xff,0xff,0xff,0xff,0xa,0xff,0xff,0xff,0xff,0x3d,
+[9940\012?\377\377{\377\377\377\377\377\377\012\377\377\377\377=
+artifact_prefix='./'; Test unit written to ./crash-7c075dfa9dd8a4a56318178dc2ad1dec0b33e8be
+Base64: Wzk5NDAKP///e////////wr/////PQ==
+MERGE-OUTER: attempt 2
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 4151605571
+INFO: Loaded 1 modules   (108 inline 8-bit counters): 108 [0x609b40, 0x609bac), 
+INFO: Loaded 1 PC tables (108 PCs): 108 [0x59e928,0x59efe8), 
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 1048576 bytes
+MERGE-INNER: using the control file '/tmp/libFuzzerTemp.Merge69.txt'
+MERGE-INNER: '/github/workspace/cifuzz-corpus/fuzzer/7c075dfa9dd8a4a56318178dc2ad1dec0b33e8be' caused a failure at the previous merge step
+MERGE-INNER: 44 total files; 20 processed earlier; will process 24 files now
+UndefinedBehaviorSanitizer:DEADLYSIGNAL
+==76==ERROR: UndefinedBehaviorSanitizer: SEGV on unknown address (pc 0x0000004c7876 bp 0x7ffdb7765c70 sp 0x7ffdb7765bb0 T76)
+==76==The signal is caused by a READ memory access.
+==76==Hint: this fault was caused by a dereference of a high value address (see register values below).  Disassemble the provided pc to learn which register was used.
+    #0 0x4c7876 in back /usr/local/bin/../include/c++/v1/deque:1894:14
+    #1 0x4c7876 in callout_handler(pcre2_callout_block_8*, void*) /src/pcre2_ast/pcre2_ast.cpp:211:49
+    #2 0x7f08e0b78905  (/lib/x86_64-linux-gnu/libpcre2-8.so.0+0x4a905) (BuildId: b014a445a36144258dc62004fd30cb8ab3fca60a)
+    #3 0x7f08e0b7a484 in pcre2_match_8 (/lib/x86_64-linux-gnu/libpcre2-8.so.0+0x4c484) (BuildId: b014a445a36144258dc62004fd30cb8ab3fca60a)
+    #4 0x4c6862 in from_json(std::__1::basic_string<char, std::__1::char_traits<char>, std::__1::allocator<char> > const&) /src/pcre2_ast/pcre2_ast.cpp:344:12
+    #5 0x4c13eb in LLVMFuzzerTestOneInput /src/pcre2_ast/fuzzer.cc:11:13
+    #6 0x4272b3 in fuzzer::Fuzzer::ExecuteCallback(unsigned char const*, unsigned long) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerLoop.cpp:611:15
+    #7 0x4300a4 in fuzzer::Fuzzer::CrashResistantMergeInternalStep(std::__Fuzzer::basic_string<char, std::__Fuzzer::char_traits<char>, std::__Fuzzer::allocator<char> > const&, bool) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMerge.cpp:235:5
+    #8 0x418149 in fuzzer::FuzzerDriver(int*, char***, int (*)(unsigned char const*, unsigned long)) /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerDriver.cpp:885:8
+    #9 0x4417f2 in main /src/llvm-project/compiler-rt/lib/fuzzer/FuzzerMain.cpp:20:10
+    #10 0x7f08e0916082 in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x24082) (BuildId: 1878e6b475720c7c51969e69ab2d276fae6d1dee)
+    #11 0x408bdd in _start (build-out/fuzzer+0x408bdd)
+
+DEDUP_TOKEN: back--callout_handler(pcre2_callout_block_8*, void*)--
+UndefinedBehaviorSanitizer can not provide additional info.
+SUMMARY: UndefinedBehaviorSanitizer: SEGV /usr/local/bin/../include/c++/v1/deque:1894:14 in back
+==76==ABORTING
+MS: 0 ; base unit: 0000000000000000000000000000000000000000
+0x5b,0x39,0x39,0x34,0x30,0xa,0x3f,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xff,0xa,0x1d,0xff,0xff,0xff,0xff,0x3d,
+[9940\012?\377\377\377\377\377\377\377\377\012\035\377\377\377\377=
+artifact_prefix='./'; Test unit written to ./crash-41dcf47c89d235cef7369a8daa4d8bcd907f9131
+Base64: Wzk5NDAKP///////////Ch3/////PQ==
+MERGE-OUTER: attempt 3
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 4152210475
+INFO: Loaded 1 modules   (108 inline 8-bit counters): 108 [0x609b40, 0x609bac), 
+INFO: Loaded 1 PC tables (108 PCs): 108 [0x59e928,0x59efe8), 
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 1048576 bytes
+MERGE-INNER: using the control file '/tmp/libFuzzerTemp.Merge69.txt'
+MERGE-INNER: '/github/workspace/cifuzz-corpus/fuzzer/41dcf47c89d235cef7369a8daa4d8bcd907f9131' caused a failure at the previous merge step
+MERGE-INNER: 44 total files; 21 processed earlier; will process 23 files now
+#1	pulse  cov: 4 ft: 4 exec/s: 0 rss: 29Mb
+#2	pulse  cov: 4 ft: 4 exec/s: 0 rss: 29Mb
+#4	pulse  cov: 4 ft: 4 exec/s: 0 rss: 29Mb
+#8	pulse  cov: 4 ft: 4 exec/s: 0 rss: 29Mb
+#16	pulse  cov: 4 ft: 4 exec/s: 0 rss: 29Mb
+#23	DONE   cov: 10 ft: 10 exec/s: 0 rss: 29Mb
+MERGE-OUTER: successful in 3 attempt(s)
+MERGE-OUTER: the control file has 4823 bytes
 MERGE-OUTER: consumed 0Mb (30Mb rss) to parse the control file
 MERGE-OUTER: 4 new files with 22 new features added; 21 new coverage edges
